@@ -9,6 +9,10 @@ public abstract class Tamagotchi implements TamagotchiActions {
     protected int hambre;
     protected boolean durmiendo = false;
     protected boolean vivo = true;
+    protected int alimentos=2;
+    protected int medicinas=2;
+    protected double puntos=10.0;
+
 
     public Tamagotchi(String nombre,int energia,int hambre,int felicidad,int salud){
         this.energia=energia;
@@ -72,6 +76,12 @@ public abstract class Tamagotchi implements TamagotchiActions {
         }
     }
 
+    public void Inventario(int alimentos, int medicinas,double puntos){
+        this.alimentos=alimentos;
+        this.medicinas=medicinas;
+        this.puntos=puntos;
+    }
+
     public String getEstadoAnimo() {
         if (!vivo) return "ha fallecido";
         if (hambre < 25 || energia < 20 || felicidad < 25 || salud < 30) return "se siente mal";
@@ -92,4 +102,5 @@ public abstract class Tamagotchi implements TamagotchiActions {
         mostrarCaracteristicas();
         System.out.println("----------------------------------");
     }
+
 }

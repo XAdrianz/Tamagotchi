@@ -2,7 +2,7 @@ package org.uabc2109072.tamagotchi;
 
 public class Muñeca extends Tamagotchi implements TamagotchiActions{
 
-    private int
+
 
     public Muñeca(String nombre,int energia,int hambre, int felicidad,int salud) {
         super(nombre, energia, hambre, felicidad, salud);
