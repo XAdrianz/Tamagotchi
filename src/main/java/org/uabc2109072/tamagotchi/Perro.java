@@ -51,7 +51,12 @@ public class Perro extends Tamagotchi implements TamagotchiActions{
         return salud++;
     }
 
-    public void ladrar(){}
+    public boolean ladrar(){
+        return false;
+    }
 
-    public void perseguirCola(){}
+
+    public boolean perseguirCola(){
+        return false;
+    }
 }

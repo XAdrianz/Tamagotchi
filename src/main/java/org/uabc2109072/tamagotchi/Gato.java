@@ -51,7 +51,11 @@ public class Gato extends Tamagotchi implements TamagotchiActions{
         return salud++;
     }
 
-    public void maullar(){}
+    public boolean maullar(){
+        return false;
+    }
 
-    public void ronronear(){}
+    public boolean ronronear(){
+        return false;
+    }
 }

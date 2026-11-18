@@ -12,7 +12,7 @@ public class Cuyo extends Tamagotchi implements TamagotchiActions{
     }
 
     public Cuyo(){
-        super("Añañin",100,100,100,100);
+        super("Raul",100,100,100,100);
         nivelCariñoso=6;
         nivelSociable=7;
     }
@@ -51,7 +51,11 @@ public class Cuyo extends Tamagotchi implements TamagotchiActions{
         return salud++;
     }
 
-    public void cuyCuy(){}
+    public boolean cuyCuy(){
+        return false;
+    }
 
-    public void roerMadera(){}
+    public boolean roerMadera(){
+        return false;
+    }
 }
