@@ -5,6 +5,7 @@ public class Perro extends Tamagotchi implements TamagotchiActions{
     private int nivelImperactividad;
     private int nivelAgresividad;
 
+
     public Perro(String nombre,int energia,int hambre,int felicidad,int salud, int agresividad,int hiper){
         super(nombre,energia,hambre,felicidad,salud);
         nivelAgresividad=10;
