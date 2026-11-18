@@ -88,5 +88,4 @@ public abstract class Tamagotchi implements TamagotchiActions {
         System.out.println("Estado de animo: "+ nombre +" "+getEstadoAnimo()+".");
         mostrarCaracteristicas();
     }
-
 }
