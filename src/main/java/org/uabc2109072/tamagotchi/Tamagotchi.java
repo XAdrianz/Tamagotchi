@@ -92,13 +92,13 @@ public abstract class Tamagotchi implements TamagotchiActions {
     public void mostrarEstado() {
         corregirLimites();
         System.out.println("----------------------------------");
-        System.out.println(getTipo() + ": " + nombre);
-        System.out.println("Hambre): " + hambre);
-        System.out.println("Energia:         " + energia);
-        System.out.println("Felicidad:       " + felicidad);
-        System.out.println("Salud:           " + salud);
-        System.out.println("Durmiendo:       " + (durmiendo ? "sí" : "no"));
-        System.out.println("Estado de animo: " + nombre + " " + getEstadoAnimo() + ".");
+        System.out.println(getTipo() + ": "+nombre);
+        System.out.println("Hambre): "+hambre);
+        System.out.println("Energia:         "+energia);
+        System.out.println("Felicidad:       "+felicidad);
+        System.out.println("Salud:           "+salud);
+        System.out.println("Durmiendo:       "+(durmiendo ? "sí" : "no"));
+        System.out.println("Estado de animo: "+ nombre +" "+getEstadoAnimo()+".");
         mostrarCaracteristicas();
         System.out.println("----------------------------------");
     }
