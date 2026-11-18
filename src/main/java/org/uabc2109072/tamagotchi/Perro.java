@@ -5,7 +5,6 @@ public class Perro extends Tamagotchi implements TamagotchiActions{
     private int nivelImperactividad;
     private int nivelAgresividad;
 
-
     public Perro(String nombre,int energia,int hambre,int felicidad,int salud, int agresividad,int hiper){
         super(nombre,energia,hambre,felicidad,salud);
         nivelAgresividad=10;
@@ -59,5 +58,10 @@ public class Perro extends Tamagotchi implements TamagotchiActions{
 
     public boolean perseguirCola(){
         return false;
+    }
+    @Override
+    public void mostrarCaracteristicas() {
+        System.out.println("Nivel de hiperactividad: " + nivelImperactividad + "/10");
+        System.out.println("Nivel de agresividad:    " + nivelAgresividad + "/10");
     }
 }
