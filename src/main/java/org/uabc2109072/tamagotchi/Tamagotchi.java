@@ -79,8 +79,8 @@ public abstract class Tamagotchi implements TamagotchiActions {
     public void mostrarEstado() {
         corregirLimites();
         System.out.println("ESTADO DE LA MASCOTA");
-        System.out.println("Su nombre es: "+nombre);
-        System.out.println("Hambre: "+hambre);
+        System.out.println("Su nombre es:    "+nombre);
+        System.out.println("Hambre:          "+hambre);
         System.out.println("Energia:         "+energia);
         System.out.println("Felicidad:       "+felicidad);
         System.out.println("Salud:           "+salud);
