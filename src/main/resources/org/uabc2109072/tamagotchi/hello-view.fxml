@@ -1,16 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<?import javafx.scene.control.Button?>
-<VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
+<VBox alignment="TOP_CENTER" spacing="10.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="org.uabc2109072.tamagotchi.HelloController">
     <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0"/>
     </padding>
 
-    <Label fx:id="welcomeText"/>
-    <Button text="Hello!" onAction="#onHelloButtonClick"/>
+    <Label text="Simulador de Tamagotchis" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+
+    <HBox spacing="8.0">
+        <TextField fx:id="txtNombre" promptText="Nombre" HBox.hgrow="ALWAYS"/>
+        <ComboBox fx:id="cmbTipo"/>
+        <Button text="Crear" onAction="#onCrearClick"/>
+    </HBox>
+
+    <ComboBox fx:id="cmbMascotas" maxWidth="Infinity" promptText="Selecciona tu mascota" onAction="#onSeleccionarClick"/>
+
+    <Label fx:id="lblEstado" style="-fx-font-size: 16px;"/>
+
+    <GridPane hgap="10.0" vgap="6.0">
+        <Label text="Hambre" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <ProgressBar fx:id="barHambre" prefWidth="320.0" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+        <Label text="Energia" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <ProgressBar fx:id="barEnergia" prefWidth="320.0" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+        <Label text="Felicidad" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+        <ProgressBar fx:id="barFelicidad" prefWidth="320.0" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+        <Label text="Salud" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+        <ProgressBar fx:id="barSalud" prefWidth="320.0" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+    </GridPane>
+
+    <HBox spacing="8.0" alignment="CENTER_LEFT">
+        <ComboBox fx:id="cmbAlimento"/>
+        <Button text="Alimentar" onAction="#onAlimentarClick"/>
+        <ComboBox fx:id="cmbJuego"/>
+        <Button text="Jugar" onAction="#onJugarClick"/>
+    </HBox>
+
+    <HBox spacing="8.0" alignment="CENTER">
+        <Button fx:id="btnDormir" text="Dormir" onAction="#onDormirClick"/>
+        <Button text="Sanar" onAction="#onSanarClick"/>
+        <Button text="Accion especial" onAction="#onEspecialClick"/>
+    </HBox>
+
+    <Label fx:id="lblMensaje" wrapText="true" style="-fx-font-style: italic;"/>
+
+    <TextArea fx:id="txtInfo" editable="false" prefRowCount="9"/>
 </VBox>
