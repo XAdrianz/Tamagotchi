@@ -7,55 +7,78 @@ public class Cuyo extends Tamagotchi implements TamagotchiActions{
 
     public Cuyo(String nombre,int energia,int hambre,int felicidad,int salud, int Cariñoso,int Sociable){
         super(nombre,energia,hambre,felicidad,salud);
-        nivelCariñoso=10;
-        nivelSociable=10;
+        nivelCariñoso=Cariñoso;
+        nivelSociable=Sociable;
     }
 
-    public Cuyo(){
-        super("Raul",100,100,100,100);
+    public Cuyo(String nombre){
+        super(nombre,100,0,100,100);
         nivelCariñoso=6;
         nivelSociable=7;
     }
 
-    @Override
-    public void comer(int alimento) {
-        System.out.println("Estoy comiendo "+alimento);
-        alimento--;
-        hambre++;
-        energia++;
+    public Cuyo(){
+        this("Raul");
     }
 
     @Override
-    public int jugar() {
-        System.out.println("!"+nombre+" y tu van a jugar!");
-        energia--;
-        return felicidad++;
+    public String comer(Alimento alimento) {
+        String bloqueo = noPuedeActuar();
+        if (bloqueo != null) return bloqueo;
+        int energiaGanada = 0;
+        switch (alimento) {
+            case CROQUETAS -> energiaGanada = 8;
+            case FRUTA -> energiaGanada = 15;
+            case DULCES -> energiaGanada = 2;
+        }
+        hambre -= 20;
+        energia += energiaGanada;
+        felicidad += 3;
+        corregirLimites();
+        return "Estoy comiendo " + alimento + " (+" + energiaGanada + " energia)";
     }
 
     @Override
-    public int dormir(int horasDeSuenio) {
-        System.out.println(nombre+" dormira una siesta...");
-        hambre--;
-        return energia++;
+    public String jugar(Juego juego) {
+        String bloqueo = noPuedeActuar();
+        if (bloqueo != null) return bloqueo;
+        if (energia < 10) return nombre + " esta muy cansado para jugar";
+        int felicidadGanada = 0;
+        int energiaPerdida = 0;
+        switch (juego) {
+            case PELOTA -> { felicidadGanada = 10; energiaPerdida = 5; }
+            case CORRER -> { felicidadGanada = 15; energiaPerdida = 12; }
+            case ESCONDIDAS -> { felicidadGanada = 22; energiaPerdida = 8; }
+        }
+        felicidad += felicidadGanada;
+        energia -= energiaPerdida;
+        hambre += 5;
+        corregirLimites();
+        return "!" + nombre + " y tu van a jugar a " + juego + "!";
+    }
+
+    public String cuyCuy(){
+        felicidad += 2;
+        corregirLimites();
+        return nombre + " dice: Cuy cuy!";
+    }
+
+    public String roerMadera(){
+        hambre -= 5;
+        felicidad += 3;
+        corregirLimites();
+        return nombre + " esta royendo la madera";
     }
 
     @Override
-    public boolean morir() {
-        System.out.print(nombre+" Ha fallecido😢");
-        return false;
+    public String comportamientoEspecifico() {
+        if (Math.random() < 0.5) return cuyCuy();
+        return roerMadera();
     }
 
     @Override
-    public int sanar(int medicina) {
-        System.out.println("Has sanado a "+nombre);
-        return salud++;
-    }
-
-    public boolean cuyCuy(){
-        return false;
-    }
-
-    public boolean roerMadera(){
-        return false;
+    public String mostrarCaracteristicas() {
+        return "Nivel de cariño:    " + nivelCariñoso + "/10\n"
+                + "Nivel de sociable:  " + nivelSociable + "/10";
     }
 }
