@@ -6,12 +6,9 @@ public abstract class Tamagotchi implements TamagotchiActions {
     protected int salud;
     protected int energia;
     protected int felicidad;
-    protected int hambre;
+    protected int hambre;   // 0 = sin hambre, 100 = muriendo de hambre
     protected boolean durmiendo=false;
     protected boolean vivo=true;
-    protected int alimentos=2;
-    protected int medicinas=2;
-    protected double puntos=10.0;
 
 
     public Tamagotchi(String nombre, int energia, int hambre, int felicidad, int salud) {
@@ -24,18 +21,34 @@ public abstract class Tamagotchi implements TamagotchiActions {
 
     public Tamagotchi() {
         this.energia=100;
-        this.hambre=100;
+        this.hambre=0;
         this.felicidad=100;
         this.nombre="Miles";
         this.salud=100;
     }
 
-    public abstract void mostrarCaracteristicas();
+    public abstract String mostrarCaracteristicas();
 
-    public abstract void comportamientoEspecifico();
+    public abstract String comportamientoEspecifico();
 
     public String getNombre() {
         return nombre;
+    }
+
+    public int getSalud() {
+        return salud;
+    }
+
+    public int getEnergia() {
+        return energia;
+    }
+
+    public int getFelicidad() {
+        return felicidad;
+    }
+
+    public int getHambre() {
+        return hambre;
     }
 
     public boolean estaVivo() {
@@ -46,9 +59,9 @@ public abstract class Tamagotchi implements TamagotchiActions {
         return durmiendo;
     }
 
-    public void despertar() {
+    public String despertar() {
         durmiendo = false;
-        System.out.println(nombre + " se desperto");
+        return nombre + " se desperto";
     }
 
     private int limitar(int valor) {
@@ -57,35 +70,84 @@ public abstract class Tamagotchi implements TamagotchiActions {
 
     //mantiene los valores entre 0 y 100
     public void corregirLimites() {
-        energia = limitar(energia);
-        hambre = limitar(hambre);
-        felicidad = limitar(felicidad);
-        salud = limitar(salud);
+        energia=limitar(energia);
+        hambre=limitar(hambre);
+        felicidad=limitar(felicidad);
+        salud=limitar(salud);
     }
 
-    public void Inventario(int alimentos, int medicinas,double puntos){
-        this.alimentos=alimentos;
-        this.medicinas=medicinas;
-        this.puntos=puntos;
+    // regresa un mensaje si el tamagotchi no puede hacer nada, o null si puede
+    protected String noPuedeActuar() {
+        if (!vivo) return nombre+" ha fallecido";
+        if (durmiendo) return nombre+" esta durmiendo";
+        return null;
+    }
+
+    // igual para todos los tamagotchis, Gato lo sobreescribe
+    @Override
+    public String dormir(int horasDeSuenio) {
+        String bloqueo = noPuedeActuar();
+        if (bloqueo != null) return bloqueo;
+        durmiendo = true;
+        energia += horasDeSuenio * 10;
+        hambre += horasDeSuenio * 3;
+        corregirLimites();
+        return nombre + " dormira una siesta...";
+    }
+
+    @Override
+    public boolean morir() {
+        vivo = false;
+        durmiendo = false;
+        return vivo;
+    }
+
+    @Override
+    public String sanar(int medicina) {
+        if (!vivo) return nombre+" ha fallecido";
+        salud += medicina;
+        corregirLimites();
+        return "Has sanado a "+nombre;
+    }
+
+    // se llama cada cierto tiempo para que cambien las necesidades
+    public void pasarTiempo() {
+        if (!vivo) return;
+        hambre += 2;
+        if (!durmiendo) {
+            energia -= 2;
+            felicidad -= 1;
+        }
+        if (hambre >= 100 || energia <= 0) salud -= 5;
+        corregirLimites();
+        if (salud <= 0) morir();
+    }
+
+    public Estado getEstado() {
+        if (!vivo) return Estado.FALLECIDO;
+        if (hambre>75||energia<20||felicidad<25||salud<30) return Estado.MAL;
+        if (hambre>50||energia<40||felicidad<50) return Estado.NECESITA_ATENCION;
+        return Estado.BIEN;
     }
 
     public String getEstadoAnimo() {
-        if (!vivo) return "ha fallecido";
-        if (hambre<25||energia<20||felicidad<25||salud<30) return "Se siente mal";
-        if (hambre < 50||energia<40||felicidad<50) return "necesita atencion";
-        return "se siente bien";
+        return getEstado().getTexto();
     }
 
-    public void mostrarEstado() {
-        corregirLimites();
-        System.out.println("ESTADO DE LA MASCOTA");
-        System.out.println("Su nombre es:    "+nombre);
-        System.out.println("Hambre:          "+hambre);
-        System.out.println("Energia:         "+energia);
-        System.out.println("Felicidad:       "+felicidad);
-        System.out.println("Salud:           "+salud);
-        System.out.println("Durmiendo:       "+(durmiendo ? "sí" : "no"));
-        System.out.println("Estado de animo: "+ nombre +" "+getEstadoAnimo()+".");
-        mostrarCaracteristicas();
+    public String mostrarEstado() {
+        return "Nombre: " + nombre + " (" + getClass().getSimpleName() + ")\n"
+                + "Hambre:    " + hambre + "/100\n"
+                + "Energia:   " + energia + "/100\n"
+                + "Felicidad: " + felicidad + "/100\n"
+                + "Salud:     " + salud + "/100\n"
+                + "Durmiendo: " + (durmiendo ? "Si" : "No") + "\n"
+                + "Animo: " + nombre + " " + getEstadoAnimo() + "\n"
+                + mostrarCaracteristicas();
     }
+
+    @Override
+    public String toString() {
+        return nombre + " (" + getClass().getSimpleName() + ")";
+    }
+
 }
