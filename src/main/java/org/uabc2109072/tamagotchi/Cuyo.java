@@ -60,7 +60,7 @@ public class Cuyo extends Tamagotchi implements TamagotchiActions{
     public String cuyCuy(){
         felicidad += 2;
         corregirLimites();
-        return nombre + " dice: Cuy cuy!";
+        return "CUY CUY";
     }
 
     public String roerMadera(){

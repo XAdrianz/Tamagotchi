@@ -1,30 +1,29 @@
 package org.uabc2109072.tamagotchi;
 
-
 public abstract class Tamagotchi implements TamagotchiActions {
     protected String nombre;
     protected int salud;
     protected int energia;
     protected int felicidad;
     protected int hambre;   // 0 = sin hambre, 100 = muriendo de hambre
-    protected boolean durmiendo=false;
-    protected boolean vivo=true;
-
+    protected boolean durmiendo = false;
+    protected boolean vivo = true;
+    protected int ultimaRecompensa = 0;
 
     public Tamagotchi(String nombre, int energia, int hambre, int felicidad, int salud) {
-        this.energia=energia;
-        this.hambre=hambre;
-        this.felicidad=felicidad;
-        this.nombre=nombre;
-        this.salud=salud;
+        this.energia = energia;
+        this.hambre = hambre;
+        this.felicidad = felicidad;
+        this.nombre = nombre;
+        this.salud = salud;
     }
 
     public Tamagotchi() {
-        this.energia=100;
-        this.hambre=0;
-        this.felicidad=100;
-        this.nombre="Miles";
-        this.salud=100;
+        this.energia = 100;
+        this.hambre = 0;
+        this.felicidad = 100;
+        this.nombre = "Miles";
+        this.salud = 100;
     }
 
     public abstract String mostrarCaracteristicas();
@@ -59,6 +58,16 @@ public abstract class Tamagotchi implements TamagotchiActions {
         return durmiendo;
     }
 
+    public int cobrarRecompensa() {
+        int r = ultimaRecompensa;
+        ultimaRecompensa = 0;
+        return r;
+    }
+
+    public String nombreMoneda() {
+        return "puntos";
+    }
+
     public String despertar() {
         durmiendo = false;
         return nombre + " se desperto";
@@ -70,16 +79,16 @@ public abstract class Tamagotchi implements TamagotchiActions {
 
     //mantiene los valores entre 0 y 100
     public void corregirLimites() {
-        energia=limitar(energia);
-        hambre=limitar(hambre);
-        felicidad=limitar(felicidad);
-        salud=limitar(salud);
+        energia = limitar(energia);
+        hambre = limitar(hambre);
+        felicidad = limitar(felicidad);
+        salud = limitar(salud);
     }
 
     // regresa un mensaje si el tamagotchi no puede hacer nada, o null si puede
     protected String noPuedeActuar() {
-        if (!vivo) return nombre+" ha fallecido";
-        if (durmiendo) return nombre+" esta durmiendo";
+        if (!vivo) return nombre + " ha fallecido";
+        if (durmiendo) return nombre + " esta durmiendo";
         return null;
     }
 
@@ -104,10 +113,10 @@ public abstract class Tamagotchi implements TamagotchiActions {
 
     @Override
     public String sanar(int medicina) {
-        if (!vivo) return nombre+" ha fallecido";
+        if (!vivo) return nombre + " ha fallecido";
         salud += medicina;
         corregirLimites();
-        return "Has sanado a "+nombre;
+        return "Has sanado a " + nombre;
     }
 
     // se llama cada cierto tiempo para que cambien las necesidades
@@ -125,8 +134,8 @@ public abstract class Tamagotchi implements TamagotchiActions {
 
     public Estado getEstado() {
         if (!vivo) return Estado.FALLECIDO;
-        if (hambre>75||energia<20||felicidad<25||salud<30) return Estado.MAL;
-        if (hambre>50||energia<40||felicidad<50) return Estado.NECESITA_ATENCION;
+        if (hambre > 75 || energia < 20 || felicidad < 25 || salud < 30) return Estado.MAL;
+        if (hambre > 50 || energia < 40 || felicidad < 50) return Estado.NECESITA_ATENCION;
         return Estado.BIEN;
     }
 
@@ -149,5 +158,4 @@ public abstract class Tamagotchi implements TamagotchiActions {
     public String toString() {
         return nombre + " (" + getClass().getSimpleName() + ")";
     }
-
 }

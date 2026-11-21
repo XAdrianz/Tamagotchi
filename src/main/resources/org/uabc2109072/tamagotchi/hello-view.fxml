@@ -4,49 +4,66 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox alignment="TOP_CENTER" spacing="10.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+<VBox spacing="10" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="org.uabc2109072.tamagotchi.HelloController">
     <padding>
-        <Insets bottom="15.0" left="15.0" right="15.0" top="15.0"/>
+        <Insets top="15" right="15" bottom="15" left="15"/>
     </padding>
 
-    <Label text="Simulador de Tamagotchis" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
-
-    <HBox spacing="8.0">
-        <TextField fx:id="txtNombre" promptText="Nombre" HBox.hgrow="ALWAYS"/>
+    <!-- Crear mascota -->
+    <HBox spacing="8">
+        <TextField fx:id="txtNombre" promptText="Nombre mascota" HBox.hgrow="ALWAYS"/>
         <ComboBox fx:id="cmbTipo"/>
         <Button text="Crear" onAction="#onCrearClick"/>
     </HBox>
 
-    <ComboBox fx:id="cmbMascotas" maxWidth="Infinity" promptText="Selecciona tu mascota" onAction="#onSeleccionarClick"/>
+    <!-- Seleccionar mascota -->
+    <HBox spacing="8">
+        <Label text="Mascota:"/>
+        <ComboBox fx:id="cmbMascotas" onAction="#onSeleccionarClick" HBox.hgrow="ALWAYS"/>
+    </HBox>
 
-    <Label fx:id="lblEstado" style="-fx-font-size: 16px;"/>
+    <!-- Estado y barras -->
+    <Label fx:id="lblEstado" text="Crea una mascota para empezar" style="-fx-font-weight: bold;"/>
+    <GridPane hgap="8" vgap="5">
+        <Label text="Hambre:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <ProgressBar fx:id="barHambre" prefWidth="300" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
 
-    <GridPane hgap="10.0" vgap="6.0">
-        <Label text="Hambre" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-        <ProgressBar fx:id="barHambre" prefWidth="320.0" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
-        <Label text="Energia" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-        <ProgressBar fx:id="barEnergia" prefWidth="320.0" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
-        <Label text="Felicidad" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
-        <ProgressBar fx:id="barFelicidad" prefWidth="320.0" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
-        <Label text="Salud" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
-        <ProgressBar fx:id="barSalud" prefWidth="320.0" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+        <Label text="Energia:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <ProgressBar fx:id="barEnergia" prefWidth="300" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+        <Label text="Felicidad:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+        <ProgressBar fx:id="barFelicidad" prefWidth="300" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+        <Label text="Salud:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+        <ProgressBar fx:id="barSalud" prefWidth="300" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
     </GridPane>
 
-    <HBox spacing="8.0" alignment="CENTER_LEFT">
+    <!-- Acciones -->
+    <HBox spacing="8">
         <ComboBox fx:id="cmbAlimento"/>
         <Button text="Alimentar" onAction="#onAlimentarClick"/>
+        <Button text="Comprar Alimento" onAction="#onComprarAlimentoClick"/>
+    </HBox>
+
+    <HBox spacing="8">
         <ComboBox fx:id="cmbJuego"/>
         <Button text="Jugar" onAction="#onJugarClick"/>
     </HBox>
 
-    <HBox spacing="8.0" alignment="CENTER">
+    <HBox spacing="8">
         <Button fx:id="btnDormir" text="Dormir" onAction="#onDormirClick"/>
         <Button text="Sanar" onAction="#onSanarClick"/>
-        <Button text="Accion especial" onAction="#onEspecialClick"/>
+        <Button text="Comprar Medicina" onAction="#onComprarMedicinaClick"/>
+        <Button text="Especial" onAction="#onEspecialClick"/>
     </HBox>
 
-    <Label fx:id="lblMensaje" wrapText="true" style="-fx-font-style: italic;"/>
+    <Label fx:id="lblMensaje" text="" wrapText="true"/>
 
-    <TextArea fx:id="txtInfo" editable="false" prefRowCount="9"/>
+    <!-- Info, Inventario y Coleccion -->
+    <HBox spacing="8" VBox.vgrow="ALWAYS">
+        <TextArea fx:id="txtInfo" editable="false" prefWidth="150"/>
+        <TextArea fx:id="txtInventario" editable="false" prefWidth="150"/>
+        <TextArea fx:id="txtColeccion" editable="false" prefWidth="150"/>
+    </HBox>
 </VBox>

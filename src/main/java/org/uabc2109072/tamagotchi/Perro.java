@@ -60,7 +60,7 @@ public class Perro extends Tamagotchi implements TamagotchiActions{
 
     public String ladrar(){
         nivelLadridos++;
-        return nombre + " dice: Guau guau!";
+        return "WOOF WOOF!";
     }
 
     public String perseguirCola(){

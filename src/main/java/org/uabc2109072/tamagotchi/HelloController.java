@@ -21,13 +21,17 @@ public class HelloController {
     @FXML private Label lblEstado;
     @FXML private Label lblMensaje;
     @FXML private TextArea txtInfo;
+    @FXML private TextArea txtInventario;
+    @FXML private TextArea txtColeccion;
     @FXML private Button btnDormir;
 
     private Tamagotchi actual;
+    private Coleccion coleccion = new Coleccion();
+    private Inventario inventario = new Inventario();
 
     @FXML
     public void initialize() {
-        cmbTipo.getItems().addAll("Perro", "Gato", "Cuyo", "Muñeca");
+        cmbTipo.getItems().addAll("Perro", "Gato", "Cuyo", "Erizo");
         cmbTipo.getSelectionModel().selectFirst();
         cmbAlimento.getItems().addAll(Alimento.values());
         cmbAlimento.getSelectionModel().selectFirst();
@@ -36,9 +40,7 @@ public class HelloController {
 
         // cada 5 segundos pasa el tiempo para todas las mascotas
         Timeline reloj = new Timeline(new KeyFrame(Duration.seconds(5), e -> {
-            for (Tamagotchi t : cmbMascotas.getItems()) {
-                t.pasarTiempo();
-            }
+            coleccion.pasarTiempo();
             actualizarVista();
         }));
         reloj.setCycleCount(Animation.INDEFINITE);
@@ -59,8 +61,9 @@ public class HelloController {
             case "Perro" -> nueva = new Perro(nombre);
             case "Gato" -> nueva = new Gato(nombre);
             case "Cuyo" -> nueva = new Cuyo(nombre);
-            default -> nueva = new Muñeca(nombre);
+            default -> nueva = new Erizo(nombre);
         }
+        coleccion.agregar(nueva);
         cmbMascotas.getItems().add(nueva);
         cmbMascotas.setValue(nueva);   // esto llama a onSeleccionarClick
         txtNombre.clear();
@@ -75,16 +78,29 @@ public class HelloController {
 
     @FXML
     protected void onAlimentarClick() {
-        if (hayMascota()) {
-            mostrarMensaje(actual.comer(cmbAlimento.getValue()));
+        if (!hayMascota()) return;
+        Alimento a = cmbAlimento.getValue();
+        if (!actual.estaVivo() || actual.estaDurmiendo()) {
+            mostrarMensaje(actual.comer(a));
+            return;
+        }
+        if (inventario.usarAlimento(a)) {
+            mostrarMensaje(actual.comer(a));
+        } else {
+            mostrarMensaje("No te queda " + a);
         }
     }
 
     @FXML
     protected void onJugarClick() {
-        if (hayMascota()) {
-            mostrarMensaje(actual.jugar(cmbJuego.getValue()));
+        if (!hayMascota()) return;
+        String mensaje = actual.jugar(cmbJuego.getValue());
+        int ganado = actual.cobrarRecompensa();
+        if (ganado > 0) {
+            inventario.ganarPuntos(ganado);
+            mensaje += " (+" + ganado + " " + actual.nombreMoneda() + ")";
         }
+        mostrarMensaje(mensaje);
     }
 
     @FXML
@@ -100,8 +116,15 @@ public class HelloController {
 
     @FXML
     protected void onSanarClick() {
-        if (hayMascota()) {
+        if (!hayMascota()) return;
+        if (!actual.estaVivo()) {
+            mostrarMensaje(actual.getNombre() + " ha fallecido");
+            return;
+        }
+        if (inventario.usarMedicina()) {
             mostrarMensaje(actual.sanar(20));
+        } else {
+            mostrarMensaje("No te quedan medicinas");
         }
     }
 
@@ -113,6 +136,25 @@ public class HelloController {
             } else {
                 mostrarMensaje(actual.getNombre() + " no puede hacerlo ahora");
             }
+        }
+    }
+
+    @FXML
+    protected void onComprarAlimentoClick() {
+        Alimento a = cmbAlimento.getValue();
+        if (inventario.comprarAlimento(a)) {
+            mostrarMensaje("Compraste " + a + " (-" + inventario.getPrecio(a) + ")");
+        } else {
+            mostrarMensaje("No te alcanza, " + a + " cuesta " + inventario.getPrecio(a));
+        }
+    }
+
+    @FXML
+    protected void onComprarMedicinaClick() {
+        if (inventario.comprarMedicina()) {
+            mostrarMensaje("Compraste una medicina (-" + inventario.getPrecioMedicina() + ")");
+        } else {
+            mostrarMensaje("No te alcanza, la medicina cuesta " + inventario.getPrecioMedicina());
         }
     }
 
@@ -130,6 +172,10 @@ public class HelloController {
     }
 
     private void actualizarVista() {
+        String moneda = (actual == null) ? "puntos" : actual.nombreMoneda();
+        txtInventario.setText(inventario.mostrar(moneda) + "\n\n" + inventario.mostrarTienda(moneda));
+        txtColeccion.setText(coleccion.listaJuguetes());
+
         if (actual == null) {
             lblEstado.setText("Crea una mascota para empezar");
             barHambre.setProgress(0);

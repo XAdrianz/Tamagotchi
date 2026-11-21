@@ -70,7 +70,7 @@ public class Gato extends Tamagotchi implements TamagotchiActions{
     }
 
     public String maullar(){
-        return nombre + " dice: Miau!";
+        return "MEOW MEOW";
     }
 
     public String ronronear(){
